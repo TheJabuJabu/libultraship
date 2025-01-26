@@ -8,12 +8,15 @@
 #include <tinyxml2.h>
 #include "resource/ResourceType.h"
 #include "utils/binarytools/BinaryReader.h"
+#include "nlohmann/json.hpp"
+
 
 namespace Ship {
 class Archive;
 
 #define RESOURCE_FORMAT_BINARY 0
 #define RESOURCE_FORMAT_XML 1
+#define RESOURCE_FORMAT_JSON 2
 
 struct ResourceInitData {
     std::shared_ptr<Archive> Parent;
@@ -29,7 +32,7 @@ struct ResourceInitData {
 struct File {
     std::shared_ptr<ResourceInitData> InitData;
     std::shared_ptr<std::vector<char>> Buffer;
-    std::variant<std::shared_ptr<tinyxml2::XMLDocument>, std::shared_ptr<BinaryReader>> Reader;
+    std::variant<std::shared_ptr<tinyxml2::XMLDocument>, std::shared_ptr<BinaryReader>, std::shared_ptr<nlohmann::json>> Reader;
     bool IsLoaded = false;
 };
 } // namespace Ship

@@ -59,6 +59,7 @@ class Archive : public std::enable_shared_from_this<Archive> {
                                                                      std::shared_ptr<tinyxml2::XMLDocument> document);
     std::shared_ptr<BinaryReader> CreateBinaryReader(std::shared_ptr<File> fileToLoad);
     std::shared_ptr<tinyxml2::XMLDocument> CreateXMLReader(std::shared_ptr<File> fileToLoad);
+    std::shared_ptr<nlohmann::json> CreateJSONReader(std::shared_ptr<File> fileToLoad);
 
     bool mIsLoaded;
     bool mHasGameVersion;
