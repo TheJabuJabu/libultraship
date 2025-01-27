@@ -8,7 +8,6 @@
 #include "utils/binarytools/MemoryStream.h"
 #include "utils/glob.h"
 #include "utils/StrHash64.h"
-#include <nlohmann/json.hpp>
 
 namespace Ship {
 Archive::Archive(const std::string& path)
@@ -134,9 +133,9 @@ std::shared_ptr<ResourceInitData> Archive::ReadResourceInitData(const std::strin
         initData->Format = RESOURCE_FORMAT_XML;
     }
 
-    if (formatString == "JSON") {
-        initData->Format = RESOURCE_FORMAT_JSON;
-    }    
+    // if (formatString == "JSON") {
+    //     initData->Format = RESOURCE_FORMAT_JSON;
+    // }    
 
     initData->Type = Context::GetInstance()->GetResourceManager()->GetResourceLoader()->GetResourceType(parsed["type"]);
     initData->ResourceVersion = parsed["version"];
@@ -206,18 +205,21 @@ std::shared_ptr<tinyxml2::XMLDocument> Archive::CreateXMLReader(std::shared_ptr<
     return xmlReader;
 }
 
-std::shared_ptr<nlohmann::json> Archive::CreateJSONReader(std::shared_ptr<File> fileToLoad) {
-    auto stream = std::make_shared<MemoryStream>(fileToLoad->Buffer);
-    auto binaryReader = std::make_shared<BinaryReader>(stream);
-    auto jsonString = binaryReader->ReadCString();
+// std::shared_ptr<nlohmann::json> Archive::CreateJSONReader(std::shared_ptr<File> fileToLoad) {
+//     auto stream = std::make_shared<MemoryStream>(fileToLoad->Buffer);
+//     auto binaryReader = std::make_shared<BinaryReader>(stream);
+//     auto jsonString = binaryReader->ReadCString();
 
-    try {
-        return std::make_shared<nlohmann::json>(nlohmann::json::parse(jsonString));
-    } catch (const nlohmann::json::parse_error& e) {
-        SPDLOG_ERROR("Failed to parse JSON file {}. Error: {}", fileToLoad->InitData->Path, e.what());
-        return nullptr;
-    }
-}
+//     auto jsonReader = std::make_shared<nlohmann::json>();
+//     jsonReader->parse(jsonString);
+
+//     // if (jsonReader->Error()) {
+//     //     // SPDLOG_ERROR("Failed to parse JSON file {}. Error: {}", fileToLoad->InitData->Path, jsonReader->ErrorStr());
+//     //     return nullptr;
+//     // }
+
+//     return jsonReader;
+// }
 
 std::shared_ptr<File> Archive::LoadFile(const std::string& filePath, std::shared_ptr<ResourceInitData> initData) {
     std::shared_ptr<File> fileToLoad = nullptr;
@@ -251,9 +253,9 @@ std::shared_ptr<File> Archive::LoadFile(const std::string& filePath, std::shared
         case RESOURCE_FORMAT_XML:
             fileToLoad->Reader = CreateXMLReader(fileToLoad);
             break;
-        case RESOURCE_FORMAT_JSON:
-            fileToLoad->Reader = CreateJSONReader(fileToLoad);
-            break;            
+        // case RESOURCE_FORMAT_JSON:
+        //     fileToLoad->Reader = CreateJSONReader(fileToLoad);
+        //     break;            
     }
 
     fileToLoad->InitData->Parent = shared_from_this();

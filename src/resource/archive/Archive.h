@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <mutex>
 #include <tinyxml2.h>
+#include <nlohmann/json.hpp>
 #include "utils/binarytools/BinaryReader.h"
 
 namespace Ship {
@@ -58,8 +59,8 @@ class Archive : public std::enable_shared_from_this<Archive> {
     static std::shared_ptr<ResourceInitData> ReadResourceInitDataXml(const std::string& filePath,
                                                                      std::shared_ptr<tinyxml2::XMLDocument> document);
     std::shared_ptr<BinaryReader> CreateBinaryReader(std::shared_ptr<File> fileToLoad);
+    // std::shared_ptr<nlohmann::json> CreateJSONReaderJabu(std::shared_ptr<File> fileToLoad);
     std::shared_ptr<tinyxml2::XMLDocument> CreateXMLReader(std::shared_ptr<File> fileToLoad);
-    std::shared_ptr<nlohmann::json> CreateJSONReader(std::shared_ptr<File> fileToLoad);
 
     bool mIsLoaded;
     bool mHasGameVersion;
